@@ -1,0 +1,118 @@
+// pages/_app.tsx
+import '../styles/globals.css';
+import type { AppProps } from 'next/app';
+
+function MyApp({ Component, pageProps }: AppProps) {
+  return <Component {...pageProps} />;
+}
+
+export default MyApp;
+
+// pages/index.tsx
+import Image from 'next/image';
+import Link from 'next/link';
+
+export default function Home() {
+  return (
+    <div className="p-8 text-center bg-black text-white min-h-screen">
+      <Image src="/logos/main-logo.png" alt="Heat Check Sports Logo" width={192} height={192} className="mx-auto mb-6" />
+      <h1 className="text-4xl font-bold">Heat Check Sports</h1>
+      <p className="mt-4 text-xl">Feel the Pulse of the Game.</p>
+      <div className="mt-6 flex justify-center gap-4">
+        <Link href="/plans" className="bg-red-600 text-white px-6 py-3 rounded-xl">Plans</Link>
+        <Link href="/about" className="bg-gray-800 text-white px-6 py-3 rounded-xl">About</Link>
+        <Link href="/sports" className="bg-blue-600 text-white px-6 py-3 rounded-xl">All Sports</Link>
+      </div>
+    </div>
+  );
+}
+
+// pages/plans.tsx
+import Link from 'next/link';
+
+function Plans() {
+  const plans = [
+    { name: "Free", price: "$0", features: ["1 Sport", "1 Issue/Week"] },
+    { name: "Starter", price: "$5/mo", features: ["3 Sports", "EOD Newsletters"] },
+    { name: "All-Star", price: "$10/mo", features: ["All Sports", "Early Access"] },
+    { name: "MVP", price: "$20/mo", features: ["All + Archives", "Bonus Content"] }
+  ];
+
+  return (
+    <div className="p-8 bg-white min-h-screen">
+      <h2 className="text-3xl font-bold mb-6 text-center text-black">Choose Your Plan</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {plans.map(plan => (
+          <div key={plan.name} className="border p-4 rounded-xl bg-gray-100">
+            <h3 className="text-2xl font-semibold">{plan.name}</h3>
+            <p className="text-lg">{plan.price}</p>
+            <ul className="mt-2 list-disc ml-5">
+              {plan.features.map(f => <li key={f}>{f}</li>)}
+            </ul>
+            <Link href="/checkout" className="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded">Subscribe</Link>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default Plans;
+
+// pages/about.tsx
+function About() {
+  return (
+    <div className="p-8 bg-black text-white min-h-screen">
+      <h2 className="text-3xl font-bold mb-4">About Heat Check Sports</h2>
+      <p className="mb-4">Heat Check Sports is your all-in-one destination for sharp and engaging coverage across the sports universe. Whether you're a diehard fan or a casual reader, our newsletters keep you ahead of the game — literally.</p>
+      <p>We cover the biggest plays, the freshest stories, and the subtle shifts across the major leagues, every other day — right in your inbox.</p>
+    </div>
+  );
+}
+
+export default About;
+
+// pages/sports.tsx
+import Image from 'next/image';
+
+function Sports() {
+  const sports = [
+    { name: "Golf", description: "Precision meets pressure — catch every swing.", logo: "/logos/golf-logo.png" },
+    { name: "Baseball", description: "From spring training to the World Series.", logo: "/logos/baseball-logo.png" },
+    { name: "Basketball", description: "High-flying dunks and buzzer-beaters.", logo: "/logos/basketball-logo.png" },
+    { name: "Football", description: "Hard hits, big plays, full coverage.", logo: "/logos/football-logo.png" },
+    { name: "Hockey", description: "Fast, physical, and on thin ice.", logo: "/logos/hockey-logo.png" },
+    { name: "Lacrosse", description: "The fastest game on two feet — now in your feed.", logo: "/logos/lacrosse-logo.png" },
+    { name: "Soccer", description: "From MLS to UEFA, we’ve got your goals.", logo: "/logos/soccer-logo.png" }
+  ];
+
+  return (
+    <div className="p-8 bg-gray-100 min-h-screen">
+      <h2 className="text-3xl font-bold mb-6 text-center">Covered Sports</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {sports.map(sport => (
+          <div key={sport.name} className="bg-white rounded-xl shadow p-4 text-center">
+            <Image src={sport.logo} alt={`${sport.name} Logo`} width={96} height={96} className="mx-auto" />
+            <h3 className="text-xl font-semibold mt-2">{sport.name}</h3>
+            <p className="text-gray-600 mt-1">{sport.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default Sports;
+
+// pages/checkout.tsx
+function Checkout() {
+  return (
+    <div className="p-8 bg-white min-h-screen">
+      <h2 className="text-2xl font-bold mb-4">Checkout</h2>
+      <p className="mb-4">Secure payment powered by Stripe.</p>
+      <button className="bg-green-600 text-white px-6 py-3 rounded">Proceed to Payment</button>
+    </div>
+  );
+}
+
+export default Checkout;
