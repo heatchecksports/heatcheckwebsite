@@ -1,118 +1,109 @@
-// pages/_app.tsx
-import '../styles/globals.css';
-import type { AppProps } from 'next/app';
+// Root layout and structure for Heat Check Sports
+// Next.js 14 App Directory structure assumed
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+// 1. Tailwind setup (tailwind.config.js)
+export default {
+  content: [
+    "./app/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}"
+  ],
+  theme: {
+    extend: {
+      colors: {
+        primary: '#e50914', // red
+        dark: '#111111',    // black
+        light: '#ffffff'    // white
+      }
+    }
+  },
+  plugins: []
 }
 
-export default MyApp;
+// 2. app/layout.tsx - Root layout
+import './globals.css'
+import { Inter } from 'next/font/google'
 
-// pages/index.tsx
-import Image from 'next/image';
-import Link from 'next/link';
+const inter = Inter({ subsets: ['latin'] })
 
+export const metadata = {
+  title: 'Heat Check Sports',
+  description: 'Feel the Pulse of the Game.'
+}
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body className={`${inter.className} bg-dark text-light`}>{children}</body>
+    </html>
+  )
+}
+
+// 3. app/page.tsx - Home Page
 export default function Home() {
   return (
-    <div className="p-8 text-center bg-black text-white min-h-screen">
-      <Image src="/logos/main-logo.png" alt="Heat Check Sports Logo" width={192} height={192} className="mx-auto mb-6" />
-      <h1 className="text-4xl font-bold">Heat Check Sports</h1>
-      <p className="mt-4 text-xl">Feel the Pulse of the Game.</p>
-      <div className="mt-6 flex justify-center gap-4">
-        <Link href="/plans" className="bg-red-600 text-white px-6 py-3 rounded-xl">Plans</Link>
-        <Link href="/about" className="bg-gray-800 text-white px-6 py-3 rounded-xl">About</Link>
-        <Link href="/sports" className="bg-blue-600 text-white px-6 py-3 rounded-xl">All Sports</Link>
-      </div>
-    </div>
-  );
+    <main className="p-10 text-center">
+      <h1 className="text-4xl font-bold text-primary">Heat Check Sports</h1>
+      <p className="mt-4 text-lg">Feel the Pulse of the Game. Smart, witty AI-run sports content that sounds human.</p>
+    </main>
+  )
 }
 
-// pages/plans.tsx
-import Link from 'next/link';
+// 4. components/Navbar.tsx
+import Link from 'next/link'
 
-function Plans() {
-  const plans = [
-    { name: "Free", price: "$0", features: ["1 Sport", "1 Issue/Week"] },
-    { name: "Starter", price: "$5/mo", features: ["3 Sports", "EOD Newsletters"] },
-    { name: "All-Star", price: "$10/mo", features: ["All Sports", "Early Access"] },
-    { name: "MVP", price: "$20/mo", features: ["All + Archives", "Bonus Content"] }
-  ];
-
+export default function Navbar() {
   return (
-    <div className="p-8 bg-white min-h-screen">
-      <h2 className="text-3xl font-bold mb-6 text-center text-black">Choose Your Plan</h2>
+    <nav className="bg-black text-white p-4 flex justify-between">
+      <div className="font-bold">Heat Check</div>
+      <div className="space-x-4">
+        <Link href="/">Home</Link>
+        <Link href="/plans">Plans</Link>
+        <Link href="/about">About</Link>
+        <Link href="/sports">Sports</Link>
+        <Link href="/login">Login</Link>
+      </div>
+    </nav>
+  )
+}
+
+// 5. app/plans/page.tsx - Subscription Plans
+const plans = [
+  {
+    name: 'Free Plan',
+    price: '$0',
+    description: '1 sport • 1 issue/week'
+  },
+  {
+    name: 'Starter Plan',
+    price: '$5/mo',
+    description: '3 sports • Every-other-day issues'
+  },
+  {
+    name: 'All-Star Plan',
+    price: '$10/mo',
+    description: 'All sports • Early access'
+  },
+  {
+    name: 'MVP Plan',
+    price: '$20/mo',
+    description: 'All sports + archives + bonus content'
+  }
+]
+
+export default function Plans() {
+  return (
+    <main className="p-10">
+      <h2 className="text-3xl font-bold text-center mb-6">Choose Your Plan</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {plans.map(plan => (
-          <div key={plan.name} className="border p-4 rounded-xl bg-gray-100">
-            <h3 className="text-2xl font-semibold">{plan.name}</h3>
-            <p className="text-lg">{plan.price}</p>
-            <ul className="mt-2 list-disc ml-5">
-              {plan.features.map(f => <li key={f}>{f}</li>)}
-            </ul>
-            <Link href="/checkout" className="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded">Subscribe</Link>
+        {plans.map((plan) => (
+          <div key={plan.name} className="border border-primary p-6 rounded-xl shadow-lg">
+            <h3 className="text-2xl font-semibold text-primary">{plan.name}</h3>
+            <p className="text-xl mt-2">{plan.price}</p>
+            <p className="mt-4">{plan.description}</p>
+            <button className="mt-6 px-4 py-2 bg-primary text-white rounded hover:bg-red-700">Subscribe</button>
           </div>
         ))}
       </div>
-    </div>
-  );
+    </main>
+  )
 }
-
-export default Plans;
-
-// pages/about.tsx
-function About() {
-  return (
-    <div className="p-8 bg-black text-white min-h-screen">
-      <h2 className="text-3xl font-bold mb-4">About Heat Check Sports</h2>
-      <p className="mb-4">Heat Check Sports is your all-in-one destination for sharp and engaging coverage across the sports universe. Whether you're a diehard fan or a casual reader, our newsletters keep you ahead of the game — literally.</p>
-      <p>We cover the biggest plays, the freshest stories, and the subtle shifts across the major leagues, every other day — right in your inbox.</p>
-    </div>
-  );
-}
-
-export default About;
-
-// pages/sports.tsx
-import Image from 'next/image';
-
-function Sports() {
-  const sports = [
-    { name: "Golf", description: "Precision meets pressure — catch every swing.", logo: "/logos/golf-logo.png" },
-    { name: "Baseball", description: "From spring training to the World Series.", logo: "/logos/baseball-logo.png" },
-    { name: "Basketball", description: "High-flying dunks and buzzer-beaters.", logo: "/logos/basketball-logo.png" },
-    { name: "Football", description: "Hard hits, big plays, full coverage.", logo: "/logos/football-logo.png" },
-    { name: "Hockey", description: "Fast, physical, and on thin ice.", logo: "/logos/hockey-logo.png" },
-    { name: "Lacrosse", description: "The fastest game on two feet — now in your feed.", logo: "/logos/lacrosse-logo.png" },
-    { name: "Soccer", description: "From MLS to UEFA, we’ve got your goals.", logo: "/logos/soccer-logo.png" }
-  ];
-
-  return (
-    <div className="p-8 bg-gray-100 min-h-screen">
-      <h2 className="text-3xl font-bold mb-6 text-center">Covered Sports</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {sports.map(sport => (
-          <div key={sport.name} className="bg-white rounded-xl shadow p-4 text-center">
-            <Image src={sport.logo} alt={`${sport.name} Logo`} width={96} height={96} className="mx-auto" />
-            <h3 className="text-xl font-semibold mt-2">{sport.name}</h3>
-            <p className="text-gray-600 mt-1">{sport.description}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-export default Sports;
-
-// pages/checkout.tsx
-function Checkout() {
-  return (
-    <div className="p-8 bg-white min-h-screen">
-      <h2 className="text-2xl font-bold mb-4">Checkout</h2>
-      <p className="mb-4">Secure payment powered by Stripe.</p>
-      <button className="bg-green-600 text-white px-6 py-3 rounded">Proceed to Payment</button>
-    </div>
-  );
-}
-
-export default Checkout;
